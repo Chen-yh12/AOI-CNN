@@ -10,17 +10,15 @@ import tkinter as tk
 from tkinter import filedialog, messagebox, scrolledtext
 import warnings
 
-# -------------------------- Reproducibility Settings --------------------------
 warnings.filterwarnings("ignore")
 np.random.seed(42)
 torch.manual_seed(42)
 torch.backends.cudnn.deterministic = True
 
-# -------------------------- Path Settings --------------------------
 ROOT = os.path.dirname(os.path.abspath(__file__))
 os.makedirs("captures", exist_ok=True)
 
-# -------------------------- AOI Image Preprocessing (Based on Paper 3.3) --------------------------
+# -------------------------- AOI Image Preprocessing  --------------------------
 class AOIPreprocessor:
     def __init__(self):
         self.clip_limit = 2.0
@@ -62,7 +60,7 @@ class AOIPreprocessor:
         result_rgb = cv2.cvtColor(corrected, cv2.COLOR_GRAY2RGB)
         return Image.fromarray(result_rgb)
 
-# -------------------------- CNN Model (Based on Paper 3.4: 5 Convolutional Blocks) --------------------------
+# -------------------------- CNN Model --------------------------
 class TrayDamageDetector(nn.Module):
     def __init__(self, num_classes=2):
         super(TrayDamageDetector, self).__init__()
@@ -142,7 +140,6 @@ class PalletDetector:
         _, predicted = torch.max(outputs.data, 1)
         return "Damaged Pallet" if predicted.item() == 1 else "Normal Pallet"
 
-# -------------------------- GUI (All English) --------------------------
 class MainGUI:
     def __init__(self, root):
         self.root = root
